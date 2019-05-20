@@ -1,0 +1,70 @@
+--------------------------------------------------------------------------------
+|                                   Question 1                                 |
+--------------------------------------------------------------------------------
+
+To the best of my knowledge, there are no known bugs in my programs
+
+--------------------------------------------------------------------------------
+|                                   Question 2                                 |
+--------------------------------------------------------------------------------
+
+To the best of my knowledge, all my functions satisfy the big-O requirements
+
+--------------------------------------------------------------------------------
+|                                   Question 3                                 |
+--------------------------------------------------------------------------------
+
+std::vector<ValueType> Trie<ValueType>::find(const std::string& key, bool exactMatchOnly) const
+
+    Create vector searchResult to store results of search
+    if searching for SNiPs (!exactMatchOnly):
+        Set string replacedChar to last N-1 characters of key
+        Iterate through labels of root node and find node that corresponds to first char of key
+        Set Node pointer n to found node
+        loop through characters in key using variable i
+            // replace characters with all posibilites in the tree and search for each
+            Go through labels in node i and replace first char in replacedChar with label:
+                Call findMatch on replacedChar
+            Follow 'correct' path by setting n to node that corresponds to i'th char of key
+            Set replacedChar to last N-i chars of key
+    call findMatch on key
+    return searchResult
+
+    findMatch(Node* n, const std::string& key, std::vector<ValueType>& searchResult) const:
+        loop through characters in key:
+            loop through labels in Node n and set n to pointer that matches the character in key
+            if reached last character in key:
+                add values in node n to searchResult
+                return
+
+x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
+
+
+bool GenomeMatcherImpl::findGenomesWithThisDNA(const string& fragment, int minimumLength, bool exactMatchOnly, vector<DNAMatch>& matches) const:
+
+    return false if fragment is smaller than minimumLength or minimumLength is smaller than minimumSearchLength of class object
+
+    Call find function on Trie using first minimumSearchLength characters of fragment and exactMatchOnly
+    resize match vector to number of genomes
+    loop through results of find function:
+        Extract fragment.size() characters from Genome from position (both specified by search results)
+        loop through characters in extracted string:
+            if character does NOT match correspoding character in fragment:
+                increment counters differencesBeforeN or differencesAfterN accordingly
+                if !exactMatchOnly, AND only 1 differencesBeforeN exists with no differencesAfterN, increment length counter
+            else
+                if no differencesAfterN, increment length counter
+
+        if !exactMatchOnly and differencesBeforeN > 1, continue
+        if exactMatchOnly and differencesBeforeN is NOT 0, continue
+
+        Create new DNAMatch object and assign values
+
+        Add DNAMatch object to matches vector if length is more than that of the previous match of same genome
+            or if tied, position is less than previous match of same genome
+    
+    remove DNAMatch objects whose genome name is blank (No match found for this genome)
+
+    return true if matches found, false otherwise
+
+    
